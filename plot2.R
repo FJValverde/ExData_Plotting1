@@ -1,6 +1,6 @@
 ## Script to plot the SECOND figure in Project 1
 #
-# ALl of the scripts follow the same procedure:
+# All of the scripts follow the same procedure:
 # 1. Load in the needed data.
 # 2. Massage the data to extract what is needed
 # 3. Create the plot in the png device and close.
@@ -15,9 +15,9 @@ library(data.table)
 library(dplyr)
 library(lubridate)
 
-#debug = TRUE
-debug = FALSE
-plotFile = "plot2.png"
+#debug <- TRUE
+debug <- FALSE
+plotFile <- "plot2.png"
 # This pattern of reading is from:
 # http://stackoverflow.com/questions/3053833/using-r-to-download-zipped-data-file-extract-and-import-data
 # 1) Define a tmp file in the present dir where you unzip with unz,
@@ -34,10 +34,6 @@ unzip(zipFile,exdir=zipDir)
 fileName <- file.path(zipDir, (list.files(zipDir))[1])
 
 # The uncompressed data is in csv2 format (sep=";") with a header describing variable names.
-# data <- read.csv2(fileName, 
-#                  colClasses = c("Date", "POSIXct", "Numeric", "Numeric", 
-#                                 "Numeric", "Numeric", "Numeric", "Numeric", "Numeric"), 
-#                  na.strings="?")  # As per the project statement description.
 data <- fread(fileName, 
               verbose=TRUE, ## Gives lots of information about loading process.
               sep=";",
@@ -71,3 +67,4 @@ plot(fdata$time, fdata$globalActivePower, type="l",  # line scatterplot
 if (!debug){
     dev.off()  # Really only need to close on file devices.
 }
+cat("Done!")

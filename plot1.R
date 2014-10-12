@@ -1,15 +1,22 @@
 ## Script to plot the first figure in Project 1
 #
-# ALl of the scripts follow the same procedure:
+# All of the scripts follow the same procedure:
 # 1. Load in the needed data.
-# 2. Work out the plot in the screen device.
-# 3. Export to the png device and close.
+# 2. Massage the data to extract what is needed
+# 3. Create the plot in the png device and close.
+#
+# In fact, so that running is a little bit smoother I have used a flag debug
+# to distinguish between two phases:
+# - debug == TRUE, marks the designing phase: we build on a screen device the plot
+#                  to check that it complies with the visual specifications
+# - debug == FALSE, marks the plotting phase: we print to the PNG device
 library(data.table)
 library(dplyr)
 library(lubridate)
 
-#debug = TRUE
-debug = FALSE
+#debug <- TRUE
+debug <- FALSE
+plotFile <- "plot1.png"
 # This pattern of reading is from:
 # http://stackoverflow.com/questions/3053833/using-r-to-download-zipped-data-file-extract-and-import-data
 # 1) Define a tmp file in the present dir where you unzip with unz,
@@ -26,10 +33,6 @@ unzip(zipFile,exdir=zipDir)
 fileName <- file.path(zipDir, (list.files(zipDir))[1])
 
 # The uncompressed data is in csv2 format (sep=";") with a header describing variable names.
-# data <- read.csv2(fileName, 
-#                  colClasses = c("Date", "POSIXct", "Numeric", "Numeric", 
-#                                 "Numeric", "Numeric", "Numeric", "Numeric", "Numeric"), 
-#                  na.strings="?")  # As per the project statement description.
 data <- fread(fileName, 
               verbose=TRUE,
               sep=";",
@@ -53,7 +56,7 @@ if (debug) summary(fdata)
 if (debug){
     quartz()  # First on screen to check output     
 }else{
-    png(filename="plot1.png")  # Rest of defaults seem adequate.
+    png(filename=plotFile)  # Rest of defaults seem adequate.
 }
 hist(fdata$globalActivePower,
      main="Global Active Power",
@@ -66,3 +69,4 @@ hist(fdata$globalActivePower,
 if (!debug){
     dev.off()  # Really only need to close on file devices.
 }
+cat("Done!")
